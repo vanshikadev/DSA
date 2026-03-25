@@ -10,22 +10,16 @@
  */
 class Solution {
     public ListNode middleNode(ListNode head) {
-        int size = getSize(head);
-        ListNode curr = head;
-        int half = size/2;
-        while(half !=0  && head != null && head.next != null){
-            curr = curr.next;
-            half -= 1;
-        } 
 
-        return curr;
-    }
-    private int getSize(ListNode head){
-        int size = 0;
-        while (head != null){
-            size += 1;
-            head = head.next;
+        ListNode curr = head;
+        ListNode prev = head;
+
+        while (curr != null && curr.next != null){
+            prev = prev.next;
+            curr = curr.next.next;
         }
-        return size;
+        return prev;
+      
     }
+   
 }
