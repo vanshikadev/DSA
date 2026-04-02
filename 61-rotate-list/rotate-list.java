@@ -10,45 +10,36 @@
  */
 class Solution {
     public ListNode rotateRight(ListNode head, int k) {
-        if(k == 0 || head == null || head.next == null ) //edge cases
-        {
+        int size = getSize(head);
+        if(k==size || k==0 || head == null || head.next == null ){
             return head;
         }
-        int size = getSize(head);  // O(N) 
-
-        if(k > size){
+        if(k>size){
             k = k%size;
         }
-        if(k == size ){ return head; } // same size. 
-
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
+        ListNode prev = dummy;
+        ListNode curr = dummy;
 
-        ListNode forw = dummy;
-        ListNode back = dummy;
-
-
-        for(int i = 0 ; i< k; i++ ){
-            forw = forw.next;       // O(K)
+        for(int i =0;i<k;i++){
+            curr = curr.next;
         }
-        while (forw.next != null ){
-            forw= forw.next;        //O(N-k)
-            back = back.next;
+        while(curr.next != null){
+            curr = curr.next;
+            prev = prev.next;
         }
-
-        forw.next = dummy.next;
-        dummy.next = back.next;
-        back.next = null;
+        curr.next = dummy.next;
+        dummy.next = prev.next;
+        prev.next = null;
         return dummy.next;
-
 }
-
 private int getSize(ListNode head){
-    int size = 0; 
-    while(head != null ){
-        size = size +1; 
-        head = head.next;
+    int size =0;
+    while(head != null){
+        head =head.next;
+        size = size + 1;
     }
-    return size; 
+    return size;
 }
 }
