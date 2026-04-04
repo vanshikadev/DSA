@@ -15,12 +15,19 @@ class Solution {
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
         ListNode connect = dummy;
-        for(int i = 1 ; i<left; i++ ){
-            prev=prev.next;
-            connect = connect.next;
-        }
-        for(int i = 0 ; i<right; i++ ){
-            curr=curr.next;
+        // for(int i = 1 ; i<left; i++ ){
+        //     prev=prev.next;
+        //     connect = connect.next;
+        // }
+        // for(int i = 0 ; i<right; i++ ){
+        //     curr=curr.next;
+        // }
+        for(int i = 0 ; i<right; i++){
+             curr=curr.next;
+             if(i<left-1){
+                prev=prev.next;
+                connect = connect.next;
+             }
         }
         connect.next = reverse(prev,curr);
         return dummy.next;
