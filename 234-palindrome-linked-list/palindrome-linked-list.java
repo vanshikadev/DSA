@@ -2,28 +2,28 @@ class Solution {
     public boolean isPalindrome(ListNode head) {
         if (head == null || head.next == null) return true;
 
-        // 1. Find middle
+        // 1. Find middle (slow will be at middle)
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // 2. Reverse second half
-        ListNode secondHalf = reverse(slow);
-
-        // 3. Compare both halves
-        ListNode firstHalf = head;
-        ListNode temp = secondHalf;
-
-        while (temp != null) {
-            if (firstHalf.val != temp.val) return false;
-            firstHalf = firstHalf.next;
-            temp = temp.next;
+        // 2. Skip middle for odd length
+        if (fast != null) {
+            slow = slow.next;
         }
 
-        // 4. (Optional) Restore list
-        reverse(secondHalf);
+        // 3. Reverse second half
+        ListNode second = reverse(slow);
+
+        // 4. Compare first and second half
+        ListNode first = head;
+        while (second != null) {
+            if (first.val != second.val) return false;
+            first = first.next;
+            second = second.next;
+        }
 
         return true;
     }
