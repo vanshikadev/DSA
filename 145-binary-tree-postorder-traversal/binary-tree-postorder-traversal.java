@@ -14,19 +14,32 @@
  * }
  */
 class Solution {
-    List<Integer> ans = new ArrayList<>();
     public List<Integer> postorderTraversal(TreeNode root) {
-        dfs(root);
-        return ans;
-    }
-    public void dfs(TreeNode root){
-        //base condition
+        List<Integer> ans = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        TreeNode lastVisited = null;
         if(root == null){
-            return;
+            return ans;
         }
-        //hypothesis 
-        dfs(root.left);
-        dfs(root.right);
-        ans.add(root.val); //induction
+        while(!stack.isEmpty() || curr != null){
+            if(curr != null){
+                stack.push(curr);
+                curr = curr.left;
+            }
+            else{
+                TreeNode peek = stack.peek();
+
+                if(peek.right != null && peek.right != lastVisited){
+                    curr = peek.right;
+                }
+                else{
+                    lastVisited = peek;
+                    ans.add(lastVisited.val);
+                    stack.pop();
+                }
+            }
+        }
+        return ans;
     }
 }
