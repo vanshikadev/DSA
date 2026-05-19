@@ -15,21 +15,23 @@
  */
 class Solution {
     public boolean isSymmetric(TreeNode root) {
-        if(root == null) return true;
-        return compare(root.left, root.right); 
+        if(root == null){
+            return true;
+        }
+        return check(root.left,root.right);
     }
-    public boolean compare(TreeNode p , TreeNode q){
-        boolean left;
-        boolean right;
+    private boolean check(TreeNode p,TreeNode q){
         if(p == null && q == null){
             return true;
         }
-        if(p == null || q == null || p.val != q.val){
+        if(p == null || q == null){
             return false;
         }
-        left = compare(p.left, q.right);
-        right = compare(p.right,q.left);
-        return (left && right);
-
+        if(check(p.left , q.right) && check(p.right , q.left)){
+            if(p.val == q.val && q.val == p.val){
+                return true;
+            }
+        }
+        return false;
     }
 }
