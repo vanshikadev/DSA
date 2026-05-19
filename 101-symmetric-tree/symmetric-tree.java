@@ -28,7 +28,7 @@ class Solution {
             return false;
         }
         if(check(p.left , q.right) && check(p.right , q.left)){
-            if(p.val == q.val && q.val == p.val){
+            if(p.val == q.val ){
                 return true;
             }
         }
