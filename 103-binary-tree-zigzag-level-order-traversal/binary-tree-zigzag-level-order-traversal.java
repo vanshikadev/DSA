@@ -15,41 +15,35 @@
  */
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        Deque<TreeNode> queue = new ArrayDeque<>();
         List<List<Integer>> result = new ArrayList<>();
-        int count =0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        Boolean leftToRight = true;
         if (root == null) {
             return result;
         }
-        queue.offerFirst(root);
-        while (!queue.isEmpty()) {
-            count = count +1;
-            int size = queue.size();
-            List<Integer> list = new ArrayList<>();
 
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            LinkedList<Integer> list = new LinkedList<>();
+            int size = queue.size();
             for (int i = 0; i < size; i++) {
-                if (count%2 == 0) {
-                    TreeNode node = queue.peekLast();
-                    if (node.right != null) {
-                        queue.offerFirst(node.right);
-                    }
-                    if (node.left != null) {
-                        queue.offerFirst(node.left);
-                    }
-                    list.add(queue.pollLast().val);
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+                if(leftToRight){
+                    list.addLast(node.val);
                 }
                 else{
-                    TreeNode node = queue.peekFirst();
-                    if (node.left != null) {
-                        queue.offerLast(node.left);
-                    }
-                    if (node.right != null) {
-                        queue.offerLast(node.right);
-                    }
-                    list.add(queue.pollFirst().val);
+                    list.addFirst(node.val);
                 }
             }
             result.add(list);
+            leftToRight = !leftToRight;
         }
         return result;
     }
