@@ -15,29 +15,41 @@
  */
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        Deque<TreeNode> queue = new ArrayDeque<>();
         List<List<Integer>> result = new ArrayList<>();
-        Queue<TreeNode> queue = new LinkedList<>();
-        Boolean level = true;
-        if(root == null){
+        int count =0;
+        if (root == null) {
             return result;
         }
-        queue.offer(root);
-        while(!queue.isEmpty()){
-            List<Integer> list = new ArrayList<>();
+        queue.offerFirst(root);
+        while (!queue.isEmpty()) {
+            count = count +1;
             int size = queue.size();
-            for(int i = 0;i<size;i++){
-                TreeNode node = queue.poll();
-                if(level){
-                    list.add(node.val);
+            List<Integer> list = new ArrayList<>();
+
+            for (int i = 0; i < size; i++) {
+                if (count%2 == 0) {
+                    TreeNode node = queue.peekLast();
+                    if (node.right != null) {
+                        queue.offerFirst(node.right);
+                    }
+                    if (node.left != null) {
+                        queue.offerFirst(node.left);
+                    }
+                    list.add(queue.pollLast().val);
                 }
                 else{
-                     list.add(0, node.val); // insert at front
+                    TreeNode node = queue.peekFirst();
+                    if (node.left != null) {
+                        queue.offerLast(node.left);
+                    }
+                    if (node.right != null) {
+                        queue.offerLast(node.right);
+                    }
+                    list.add(queue.pollFirst().val);
                 }
-                if (node.left != null) queue.offer(node.left);
-                if (node.right != null) queue.offer(node.right);
             }
             result.add(list);
-            level = !level;
         }
         return result;
     }
