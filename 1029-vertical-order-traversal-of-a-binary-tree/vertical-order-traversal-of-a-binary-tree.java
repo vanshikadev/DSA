@@ -14,56 +14,50 @@
  * }
  */
 class Solution {
-    class Tuple {
+    class Pair {
         TreeNode node;
-        int col;
         int row;
-        Tuple(TreeNode node , int col, int row){
+        int column;
+
+        Pair(TreeNode node, int row, int column) {
             this.node = node;
             this.row = row;
-            this.col = col;
+            this.column = column;
         }
     }
+
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        TreeMap<Integer , TreeMap<Integer,PriorityQueue<Integer>>> map = new       TreeMap<>();
-        Queue<Tuple> queue = new LinkedList<>();
+        TreeMap<Integer , TreeMap<Integer , PriorityQueue<Integer>>> map = new TreeMap<>();
+        Queue<Pair> queue = new LinkedList<>();
         List<List<Integer>> result = new ArrayList<>();
-        if(root == null){return result;}
-
-        queue.offer(new Tuple(root, 0, 0));
-
+        if(root == null){
+            return result;
+        }
+        queue.offer(new Pair(root,0,0));
         while(!queue.isEmpty()){
-            Tuple tp = queue.poll();
-            int row = tp.row;
-            int col = tp.col;
-            TreeNode node = tp.node;
-
-            //add col if not present
-            map.putIfAbsent(col, new TreeMap<>());
-
-            //add row if not present
-            map.get(col).putIfAbsent(row, new PriorityQueue<>());
-
-            //add node
-            map.get(col).get(row).offer(node.val);
+            Pair pair = queue.poll();
+            int column = pair.column;
+            int row = pair.row;
+            TreeNode node = pair.node;
 
             if(node.left != null){
-                queue.offer(new Tuple(node.left, col-1 , row + 1));
+                queue.offer(new Pair(node.left , row + 1 , column -1));
             }
-             if(node.right != null){
-                queue.offer(new Tuple(node.right, col+1 , row + 1));
+            if(node.right != null){
+                queue.offer(new Pair(node.right , row + 1 , column + 1));
             }
-
+            map.putIfAbsent(column, new TreeMap<Integer,PriorityQueue<Integer>>());
+            map.get(column).putIfAbsent(row, new PriorityQueue<Integer>());
+            map.get(column).get(row).offer(node.val);
         }
-
-        for(TreeMap<Integer,PriorityQueue<Integer>> x: map.values()){
-            List<Integer> temp = new ArrayList<>();
-            for(PriorityQueue<Integer> y : x.values()){
-                while(!y.isEmpty()){
-                    temp.add(y.poll());
+        for(TreeMap<Integer, PriorityQueue<Integer>> rows : map.values()){
+            List<Integer> list = new ArrayList<>();
+            for(PriorityQueue<Integer> que : rows.values()){
+                while(!que.isEmpty()){
+                    list.add(que.poll());
                 }
             }
-            result.add(temp);
+        result.add(list);
         }
         return result;
     }
