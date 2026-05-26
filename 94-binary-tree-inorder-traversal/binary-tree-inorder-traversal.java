@@ -29,11 +29,8 @@ class Solution {
             }
             TreeNode node = stack.pop();
             result.add(node.val);
-            if(node.right != null && node.right != visited){
+            if(node.right != null){
                 curr = node.right;
-            }
-            else{
-                visited = node;
             }
         }
         return result;
