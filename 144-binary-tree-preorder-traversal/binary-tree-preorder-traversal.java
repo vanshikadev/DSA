@@ -19,17 +19,9 @@ class Solution {
         if(root == null){
             return result;
         }
-        TreeNode curr = root;
-        Stack<TreeNode> stack = new Stack<>();
-        while(!stack.isEmpty() || curr != null){
-            while(curr != null){
-                result.add(curr.val);
-                stack.add(curr);
-                curr = curr.left; 
-            }
-            TreeNode node = stack.pop();
-            curr = node.right;
-        }
+        result.add(root.val);
+        preorderTraversal(root.left);
+        preorderTraversal(root.right);
         return result;
     }
 }
