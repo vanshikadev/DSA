@@ -1,49 +1,50 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] result = new int[2];
-        int left = bisect_left(nums,target);
-        if(left == nums.length || nums[left] != target){
-            return new int[]{-1,-1};
+        int low = 0; 
+        int high = nums.length;
+        int first = findFirstElement(nums,target);
+        if (first == -1) {
+            return new int[]{-1, -1};
         }
-        int right = bisect_right(nums,target);
-        result[0] = left;
-        result[1] = right-1;
-        return result;
+        int second = findSecondElement(nums,target);
+        return new int[]{first,second};
     }
-    private int bisect_right(int[] nums, int target){
+    private int findFirstElement(int[] nums, int target){
         int low = 0;
         int high = nums.length;
-
         while(low < high){
             int mid = low + (high - low)/2;
-            if(nums[mid] == target){
-                low = mid+1;
-            }
-            else if (nums[mid] < target){
-                low = mid +1;
+            if(nums[mid] < target){
+                low = mid + 1;
             }
             else{
                 high = mid;
             }
         }
+        if(nums.length == low || nums[low] != target ){
+            return -1;
+        }
         return low;
     }
-    private int bisect_left(int[] nums , int target){
+     private int findSecondElement(int[] nums, int target){
         int low = 0;
         int high = nums.length;
-
         while(low < high){
             int mid = low + (high - low)/2;
             if(nums[mid] == target){
-                high = mid;
-            }
-            else if (nums[mid] < target){
                 low = mid +1;
             }
-            else{
+            if(nums[mid] < target){
+                low = mid + 1;
+            }
+            if(nums[mid] > target){
                 high = mid;
             }
         }
-        return low;
+        int idx = low - 1;
+        if(idx < 0 || nums[idx] != target ){
+            return -1;
+        }
+        return idx;
     }
 }
