@@ -16,7 +16,7 @@
 class Solution {
     public boolean isValidBST(TreeNode root) {
         TreeNode curr = root;
-        Stack<TreeNode> stack = new Stack<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
         boolean result = true;
         TreeNode prev = null;
         while(!stack.isEmpty() || curr != null){
