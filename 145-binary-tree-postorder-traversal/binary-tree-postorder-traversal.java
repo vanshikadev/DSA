@@ -14,31 +14,14 @@
  * }
  */
 class Solution {
+    List<Integer> result = new ArrayList<>();
     public List<Integer> postorderTraversal(TreeNode root) {
-        Stack<Pair<TreeNode,Boolean>> stack = new Stack<>();
-        List<Integer> result = new ArrayList<>();
-        TreeNode curr = root;
-        while(curr != null || !stack.isEmpty()){
-            if(curr != null){
-                stack.push(new Pair<>(curr,true));
-                curr = curr.left;
-            }
-            else{
-                Pair<TreeNode, Boolean> pair = stack.pop();
-                TreeNode node = pair.getKey();
-                Boolean isLeft = pair.getValue();
-
-                if(isLeft){
-                    stack.push(new Pair<>(node,false));
-                    curr = node.right;
-                }
-                else{
-                    result.add(node.val);
-                    curr = null;
-                }
-
-            }
+        if(root == null){
+            return result;
         }
+        postorderTraversal(root.left);
+        postorderTraversal(root.right);
+        result.add(root.val);
         return result;
     }
 }
