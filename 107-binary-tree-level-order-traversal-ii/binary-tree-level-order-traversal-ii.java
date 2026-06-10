@@ -15,29 +15,24 @@
  */
 class Solution {
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        Queue<TreeNode> queue = new ArrayDeque<>();
-        Deque<List<Integer>> result = new ArrayDeque<>();
-        // List<List<Integer>> result = new ArrayList<>();
-        if(root == null){
-            return new ArrayList<>(result);
-        }
+        LinkedList<List<Integer>> result = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        while(!queue.isEmpty()){
-            int size = queue.size();
-            List<Integer> res = new ArrayList<>();
-            for(int i = 0 ; i< size ; i++){
-                TreeNode node = queue.poll();
+        while(!queue.isEmpty() && root != null){
+           int size = queue.size();
+           List<Integer> res = new ArrayList<>();
+           for(int i = 0; i< size; i++){
+                TreeNode node =queue.poll();
                 res.add(node.val);
                 if(node.left != null){
-                    queue.offer(node.left);
+                    queue.add(node.left);
                 }
                 if(node.right != null){
-
-                    queue.offer(node.right);
+                    queue.add(node.right);
                 }
-            }
-            result.offerFirst(new ArrayList<>(res));
+           } 
+           result.addFirst(res);
         }
-        return new ArrayList<>(result);
+        return result;
     }
 }
