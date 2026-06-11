@@ -1,50 +1,46 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int low = 0; 
-        int high = nums.length;
-        int first = findFirstElement(nums,target);
-        if (first == -1) {
-            return new int[]{-1, -1};
+        int first = bisect_left(nums, target);
+        if(first == -1){
+            return new int[]{-1,-1};
         }
-        int second = findSecondElement(nums,target);
+        int second = bisect_right(nums,target);
         return new int[]{first,second};
     }
-    private int findFirstElement(int[] nums, int target){
+
+    private int bisect_left(int[] nums, int target) {
         int low = 0;
         int high = nums.length;
-        while(low < high){
-            int mid = low + (high - low)/2;
-            if(nums[mid] < target){
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] >= target) {
+                high = mid;
+            } else {
                 low = mid + 1;
             }
-            else{
-                high = mid;
-            }
         }
-        if(nums.length == low || nums[low] != target ){
+        if (low == nums.length || nums[low] != target) {
             return -1;
         }
         return low;
     }
-     private int findSecondElement(int[] nums, int target){
+
+    private int bisect_right(int[] nums, int target) {
         int low = 0;
         int high = nums.length;
-        while(low < high){
-            int mid = low + (high - low)/2;
-            if(nums[mid] == target){
-                low = mid +1;
-            }
-            if(nums[mid] < target){
-                low = mid + 1;
-            }
-            if(nums[mid] > target){
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] <= target) {
+                low = mid+1;
+            } else {
                 high = mid;
             }
         }
         int idx = low - 1;
-        if(idx < 0 || nums[idx] != target ){
+        if(idx < 0 || nums[idx] != target){
             return -1;
         }
         return idx;
+
     }
 }
