@@ -13,45 +13,49 @@
  *     }
  * }
  */
-class Solution {
-    class Pair{
-        TreeNode node;
-        int row;
-        int col;
-        Pair(TreeNode node , int row, int col){
-            this.node = node;
-            this.row = row;
-            this.col = col;
-        }
+class Pair{
+    TreeNode node;
+    int row;
+    int col;
+    Pair(TreeNode node , int row , int col){
+        this.node = node;
+        this.row = row;
+        this.col = col;
     }
+}
+class Solution {
     public List<List<Integer>> verticalTraversal(TreeNode root) {
+        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new 
+        TreeMap<>();
         List<List<Integer>> result = new ArrayList<>();
-        if(root == null){
+        TreeNode curr = root;
+        Queue<Pair> queue = new LinkedList<>();
+        if(curr == null){
             return result;
         }
-        TreeMap<Integer,TreeMap<Integer,PriorityQueue<Integer>>> rowcolmap = new TreeMap<>();
-        Stack<Pair> stack = new Stack<>();
-        stack.push(new Pair(root,0,0));
-        while(!stack.isEmpty()){
-            Pair pair = stack.pop();
+        queue.offer(new Pair(curr , 0 ,0));
+        while(!queue.isEmpty()){
+            Pair pair = queue.poll();
+            TreeNode node = pair.node;
             int row = pair.row;
             int col = pair.col;
-            TreeNode node = pair.node;
-            rowcolmap.putIfAbsent(col,new TreeMap<Integer,PriorityQueue<Integer>>());
-            rowcolmap.get(col).putIfAbsent(row, new PriorityQueue<Integer>());
-            rowcolmap.get(col).get(row).offer(node.val);
+            map.putIfAbsent(col , new TreeMap<>());
+            map.get(col).putIfAbsent(row , new PriorityQueue<>());
+            map.get(col).get(row).offer(node.val);
+
             if(node.left != null){
-                stack.push(new Pair(node.left, row+1, col-1));
+                queue.offer(new Pair(node.left, row+1 , col-1));
             }
             if(node.right != null){
-                stack.push(new Pair(node.right, row+1, col+1));
+                queue.offer(new Pair(node.right, row+1 , col+1));
             }
         }
-        for(TreeMap<Integer, PriorityQueue<Integer>> row : rowcolmap.values()){
+
+        for (TreeMap<Integer,PriorityQueue<Integer>> col : map.values()){
             List<Integer> res = new ArrayList<>();
-            for( PriorityQueue<Integer> pq : row.values()){
-                while(!pq.isEmpty()){
-                    res.add(pq.poll());
+            for (PriorityQueue<Integer> row : col.values()){
+                while(!row.isEmpty()){
+                    res.add(row.poll());
                 }
             }
             result.add(new ArrayList<>(res));
