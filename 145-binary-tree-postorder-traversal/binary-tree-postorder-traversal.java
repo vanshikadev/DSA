@@ -13,15 +13,36 @@
  *     }
  * }
  */
+ class Pair{
+    TreeNode node;
+    boolean is_left;
+    Pair(TreeNode node , boolean is_left){
+        this.node = node;
+        this.is_left = is_left;
+    }
+ }
 class Solution {
-    List<Integer> result = new ArrayList<>();
     public List<Integer> postorderTraversal(TreeNode root) {
-        if(root == null){
-            return result;
+        Stack<Pair> stack = new Stack<>();
+        TreeNode curr = root;
+        List<Integer> result = new ArrayList<>();
+        while(!stack.isEmpty() || curr != null){
+            while(curr != null){
+                stack.push(new Pair(curr , true));
+                curr = curr.left;
+            }
+            Pair pair = stack.pop();
+            TreeNode node = pair.node;
+            boolean is_left = pair.is_left;
+            if(is_left){
+                stack.push(new Pair(node, false));
+                curr = node.right;
+            }
+            else{
+                result.add(node.val);
+                curr = null;
+            }
         }
-        postorderTraversal(root.left);
-        postorderTraversal(root.right);
-        result.add(root.val);
         return result;
     }
 }
