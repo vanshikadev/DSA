@@ -34,28 +34,25 @@ class Solution {
         }
         queue.offer(new Pair(curr,0,0));
         while(!queue.isEmpty()){
-            int size = queue.size();
-            for(int i =0; i< size; i++){
-                Pair pair = queue.poll();
+                Pair pair = queue.poll();  //O(1)
                 TreeNode node = pair.node;
                 int row = pair.row;
                 int col = pair.col;
-                map.putIfAbsent(col, new TreeMap<>());
-                map.get(col).putIfAbsent(row, new PriorityQueue<>());
-                map.get(col).get(row).offer(node.val);
+                map.putIfAbsent(col, new TreeMap<>()); // Nlog(N)
+                map.get(col).putIfAbsent(row, new PriorityQueue<>()); //Nlog(N)
+                map.get(col).get(row).offer(node.val); //NO(LOG(N))
                 if(node.left != null){
-                    queue.offer(new Pair(node.left, row+1, col-1 ));
+                    queue.offer(new Pair(node.left, row+1, col-1 )); //O(1)
                 }
                 if(node.right != null){
-                    queue.offer(new Pair(node.right, row+1, col+1 ));
+                    queue.offer(new Pair(node.right, row+1, col+1 )); //O(1)
                 }
-            }
         }
         for(TreeMap<Integer,PriorityQueue<Integer>> rows : map.values()){
             List<Integer> res = new ArrayList<>();
             for(PriorityQueue<Integer> eachRows : rows.values()){
                 while(!eachRows.isEmpty()){
-                    int val = eachRows.poll();
+                    int val = eachRows.poll(); // N LOG N
                     res.add(val);
                 }
         }
