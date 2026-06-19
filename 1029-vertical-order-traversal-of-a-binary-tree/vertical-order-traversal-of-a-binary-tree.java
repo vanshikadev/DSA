@@ -25,40 +25,41 @@ class Pair{
 }
 class Solution {
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new 
-        TreeMap<>();
-        List<List<Integer>> result = new ArrayList<>();
-        TreeNode curr = root;
         Queue<Pair> queue = new LinkedList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        TreeMap<Integer,TreeMap<Integer,PriorityQueue<Integer>>> map = new TreeMap<>();
+        TreeNode curr = root;
         if(curr == null){
             return result;
         }
-        queue.offer(new Pair(curr , 0 ,0));
+        queue.offer(new Pair(curr,0,0));
         while(!queue.isEmpty()){
-            Pair pair = queue.poll();
-            TreeNode node = pair.node;
-            int row = pair.row;
-            int col = pair.col;
-            map.putIfAbsent(col , new TreeMap<>());
-            map.get(col).putIfAbsent(row , new PriorityQueue<>());
-            map.get(col).get(row).offer(node.val);
-
-            if(node.left != null){
-                queue.offer(new Pair(node.left, row+1 , col-1));
-            }
-            if(node.right != null){
-                queue.offer(new Pair(node.right, row+1 , col+1));
-            }
-        }
-
-        for (TreeMap<Integer,PriorityQueue<Integer>> col : map.values()){
-            List<Integer> res = new ArrayList<>();
-            for (PriorityQueue<Integer> row : col.values()){
-                while(!row.isEmpty()){
-                    res.add(row.poll());
+            int size = queue.size();
+            for(int i =0; i< size; i++){
+                Pair pair = queue.poll();
+                TreeNode node = pair.node;
+                int row = pair.row;
+                int col = pair.col;
+                map.putIfAbsent(col, new TreeMap<>());
+                map.get(col).putIfAbsent(row, new PriorityQueue<>());
+                map.get(col).get(row).offer(node.val);
+                if(node.left != null){
+                    queue.offer(new Pair(node.left, row+1, col-1 ));
+                }
+                if(node.right != null){
+                    queue.offer(new Pair(node.right, row+1, col+1 ));
                 }
             }
-            result.add(new ArrayList<>(res));
+        }
+        for(TreeMap<Integer,PriorityQueue<Integer>> rows : map.values()){
+            List<Integer> res = new ArrayList<>();
+            for(PriorityQueue<Integer> eachRows : rows.values()){
+                while(!eachRows.isEmpty()){
+                    int val = eachRows.poll();
+                    res.add(val);
+                }
+        }
+        result.add(res);
         }
         return result;
     }
