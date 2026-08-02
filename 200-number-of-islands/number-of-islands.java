@@ -23,42 +23,33 @@ class Solution {
     }
 
     private void bfs(char[][] grid, int r, int c) {
-
         Queue<int[]> queue = new LinkedList<>();
 
-        queue.offer(new int[]{r, c});
+        queue.offer(new int[]{r,c});
         grid[r][c] = '0';
 
-        int[][] directions = {
-            {1, 0},    // Down
-            {-1, 0},   // Up
-            {0, -1},   // Left
-            {0, 1}     // Right
+        int [][] directions = {
+            {1,0},
+            {-1,0},
+            {0,-1},
+            {0,1}
         };
+        while(!queue.isEmpty()){
+            int [] cordinates= queue.poll();
+            int row = cordinates[0];
+            int col = cordinates[1];
 
-        while (!queue.isEmpty()) {
-
-            int[] rowCol = queue.poll();
-
-            int currentRow = rowCol[0];
-            int currentCol = rowCol[1];
-
-            for (int[] dir : directions) {
-
-                int newRow = currentRow + dir[0];
-                int newCol = currentCol + dir[1];
-
-                if (newRow < 0 || newRow >= grid.length ||
-                    newCol < 0 || newCol >= grid[0].length) {
-                    continue;
+            if(row < 0 || row >= grid.length || col < 0 || col >= grid[row].length){
+                continue;
+            }
+            for(int[] dir : directions){
+                if(row + dir[0] < 0 || row + dir[0] >= grid.length || col + dir[1] < 0 || col + dir[1] >= grid[row].length){
+                continue;
+            }
+                if(!(grid[row + dir[0]][col + dir[1]] == '0')){
+                    queue.offer(new int[]{row + dir[0],col + dir[1]});
+                    grid[row + dir[0]][col + dir[1]] = '0';
                 }
-
-                if (grid[newRow][newCol] == '0') {
-                    continue;
-                }
-
-                grid[newRow][newCol] = '0';
-                queue.offer(new int[]{newRow, newCol});
             }
         }
     }
