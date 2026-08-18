@@ -6,63 +6,53 @@ class Solution {
         {0,-1}
     };
     public void solve(char[][] board) {
-        int row = board.length;
-        int column = board[0].length;
-        Queue<int[]> queue = new LinkedList<>();
-        if(row < 3 || column < 3){
-            return;
-        }
-        for(int i = 0; i<row; i++){
-            if(board[i][0]=='O'){
-                board[i][0] = 'V';
-                queue.offer(new int[]{i,0});
-                
+        int m = board.length;
+        int n = board[0].length;
+        for(int i =0 ; i<n; i++){
+            if(board[0][i] == 'O'){
+                bfs(board, 0, i, m, n);
             }
-            if(board[i][column-1] == 'O'){
-                board[i][column-1] = 'V';
-                queue.offer(new int[]{i,column-1});
+            if(board[m-1][i] == 'O'){
+                bfs(board, m-1, i, m, n);
             }
         }
-        for(int j = 0; j<column; j++){
-            if(board[0][j]=='O'){
-                board[0][j] = 'V';
-                queue.offer(new int[]{0,j});
+        for(int i =0 ; i<m ; i++){
+            if(board[i][0] == 'O'){
+                bfs(board, i, 0, m, n);
             }
-            if(board[row-1][j] == 'O'){
-                board[row-1][j] = 'V';
-                queue.offer(new int[]{row-1,j});
+            if(board[i][n-1] == 'O'){
+                bfs(board, i, n-1, m, n);
             }
         }
-        bfs(board,queue,row,column);
-        for(int k=0;k<row;k++){
-            for(int l=0;l<column;l++){
-                if(board[k][l]=='V'){
-                    board[k][l] = 'O';
+        for(int i = 0;i<m; i++){
+            for(int j = 0;j<n;j++){
+                if(board[i][j] == 'V'){
+                    board[i][j] = 'O';
                 }
-                else if(board[k][l]=='O'){
-                    board[k][l] = 'X';
+                else if(board[i][j] == 'O'){
+                    board[i][j] = 'X';
                 }
-
             }
         }
-        return;
     }
-    private void bfs(char[][] board, Queue<int[]> queue, int row, int column){
+    private void bfs(char[][] board, int i, int j, int m, int n){
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{i,j});
+        board[i][j] = 'V';
+
         while(!queue.isEmpty()){
             int[] tuple = queue.poll();
-            for(int[] dir: directions){
-
-            int newrow = tuple[0] + dir[0];
-            int newcolumn = tuple[1] + dir[1];
-
-            if(newrow < 0 || newrow >= row|| newcolumn < 0 || newcolumn >= column){
-                continue;
+            for(int[] dir : directions){
+                int r = tuple[0] + dir[0];
+                int c = tuple[1] + dir[1];
+                if(r < 0 || r >= m || c <0 || c>= n){
+                    continue;
+                }
+                if(board[r][c] == 'O'){
+                    queue.offer(new int[]{r,c});
+                    board[r][c] = 'V';
+                }
             }
-            if(board[newrow][newcolumn] == 'O'){
-                board[newrow][newcolumn] = 'V';
-                queue.offer(new int[]{newrow,newcolumn});
-            }
-        } 
         }
     }
 }
