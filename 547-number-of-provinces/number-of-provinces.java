@@ -1,32 +1,28 @@
 class Solution {
     public int findCircleNum(int[][] isConnected) {
-        int n = isConnected.length; //no. of nodes
-        boolean[] visited = new boolean[n];
-        int answer =0;
-        for(int i = 0 ; i<n ;i++)
-        {
+        int nodes = isConnected.length;
+        boolean [] visited = new boolean[nodes];
+        int provinces = 0;
+        for(int i =0; i< nodes; i++){
             if(!visited[i]){
-                answer++;
-                dfs(isConnected , visited , n,i);
+                provinces++;
+                bfs(isConnected, visited, i, nodes);
             }
         }
-        return answer;
+        return provinces;
     }
-    private void dfs(int[][] isConnected, boolean[] visited, int n, int i){
-        // Queue<Integer> queue = new LinkedList<>();
-        // queue.offer(i);
-        visited[i] = true;
-        // int size = queue.size();
-        // for(int j = 0; j< size; j++){
-            // while(!queue.isEmpty()){
-                // int node = queue.poll();
-                for(int k =0; k<n; k++){
-                    if(!visited[k] && isConnected[i][k] == 1){
-                        visited[k] = true;
-                        dfs(isConnected , visited , n,k);
-                    }
-                // }
-            // }
+    private void bfs(int[][] isConnected, boolean[] visited, int node ,int nodes){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(node);
+        visited[node] = true;
+        while(!queue.isEmpty()){
+            int n = queue.poll();
+            for(int i =0; i<nodes; i++){
+            if(!visited[i] && isConnected[n][i] ==1){
+                queue.offer(i);
+                visited[i] = true;
+            }
         }
+    }
     }
 }
