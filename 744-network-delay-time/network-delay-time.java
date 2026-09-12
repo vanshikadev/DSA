@@ -24,6 +24,9 @@ class Solution {
             for(int[] neighbour : adjlist.get(currentnode)){
                 int node = neighbour[0];
                 int weight = neighbour[1];
+                if (currentweight > distancefromsrc[currentnode]) {
+    continue;
+}
                 if(currentweight + weight < distancefromsrc[node]){
                     distancefromsrc[node] = currentweight + weight;
                     pq.offer(new int[]{node, currentweight + weight});
